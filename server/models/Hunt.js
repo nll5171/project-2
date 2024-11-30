@@ -9,6 +9,7 @@ const HuntSchema = new mongoose.Schema({
     // - Requirements (Would have to be an array of requirements I think)
     //    - More info here: https://mongoosejs.com/docs/schematypes.html#arrays
     //    - Has to be array of Schemas, so need another Schema type
+    //    - Originally I was going to do this, but I'm gonna try without for now
     // - createdDate (for sorting)
     // - Deadline (to accept submissions)
     // - Winner of the hunt (once finished)
@@ -18,10 +19,10 @@ const HuntSchema = new mongoose.Schema({
         trim: true,
         set: helper.trim,
     },
-    items: {
-        type: [ItemSchema],
-        required: true,
-    },
+    // items: {
+    //     type: [ItemSchema],
+    //     required: true,
+    // },
     owner: {
         type: mongoose.Schema.ObjectId,
         required: true,

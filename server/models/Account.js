@@ -18,6 +18,11 @@ const AccountSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    huntAmt: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
     premium: {
         type: Boolean,
         required: true,
@@ -33,6 +38,8 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
     username: doc.username,
     _id: doc._id,
+    premium: doc.premium,
+    huntAmt: doc.huntAmt,
 });
 
 // Helper function to hash password
