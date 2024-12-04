@@ -2,6 +2,8 @@ const models = require('../models');
 
 const { Hunt } = models;
 
+const makerPage = async (req, res) => res.render('app');
+
 // Create a new Scavenger Hunt with the tasks provided
 const makeHunt = async (req, res) => {
     if (!req.body.name || !req.body.deadline) {
@@ -57,6 +59,7 @@ const getUserHunts = async (req, res) => {
 };
 
 module.exports = {
+    makerPage,
     makeHunt,
     getHunts,
     getUserHunts,

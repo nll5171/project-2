@@ -4,7 +4,7 @@ const { Item } = models;
 
 // Create a new item as part of a task
 const makeItem = async(req, res) => {
-    if (!req.body.task) {
+    if (!req.body.task || !req.body.hunt) {
         return res.status(400).json({ error: 'Task description is required!' });
     }
 

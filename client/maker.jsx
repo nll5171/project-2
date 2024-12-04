@@ -23,7 +23,6 @@ const handleHunt = (e) => {
     for (let i = 0; i < taskElements.length; i++) {
         tasks.add(taskElements[i].value);
 
-        // Make sure all fields are included. Must be done for all tasks
         if (!name || !deadline || !tasks[i]) {
             // TO-DO: display error 'all fields are required!'
             return false;
@@ -31,15 +30,103 @@ const handleHunt = (e) => {
     }
 
     // Get the Id of the hunt for use with task/item creation
-    const huntId = helper.sendPost(e.target.action, {name, deadline});
-    
-    // TO-DO: Create the individual tasks...somehow
-    // Still haven't decided how to format the form stuff
-    
+    const huntId = helper.sendPost(e.target.action, { name, deadline });
+
     // Attempt to create each individual task/item
     for (let i = 0; i < tasks.length; i++) {
-        helper.sendPost('/createItem', {task: tasks[i]});
+        helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId });
     }
-    
+
     return false;
+    //location.reload();    Once I can confirm this works properly
+};
+
+// Adds task item to the list
+const AddTaskItem = () => {
+    const taskLabel = document.createElement('label');
+    taskLabel.setAttribute('htmlFor', 'task');
+    taskLabel.innerHTML = 'Task: ';
+    
+    const taskInput = document.createElement('input');
+    taskInput.setAttribute('type', 'text');
+    taskInput.setAttribute('name', 'task');
+    taskInput.setAttribute('placeholder', 'Enter task here!');
+
+    document.querySelector('#tasks').appendChild(taskLabel);
+    document.querySelector('#tasks').appendChild(taskInput);
+};
+
+const HuntForm = (props) => {
+    return (
+        <form id='huntForm'
+            onSubmit={(e) => handleHunt(e, props.triggerReload)}
+            name='huntForm'
+            action='/maker'
+            method='POST'
+        >
+            <div>
+                <h3>Hunt Overview:</h3>
+                <label htmlFor='name'>Name: </label>
+                <input id='huntName' type='text' name='name' placeholder='Hunt Name' />
+                <label htmlFor='deadline'>Deadline: </label>
+                <input id='huntDeadline' type='date' name='deadline' placeholder={Date.now} />
+            </div>
+            <div>
+                <h3>Tasks:</h3>
+                <div id='tasks'>
+                    <label htmlFor='task'>Task: </label>
+                    <input type='text' name='task' placeholder='Enter task here!' />
+                    <button onClick={AddTaskItem}>Add another task!</button>
+                </div>
+            </div>
+            <input type='submit' value='Make Hunt' />
+        </form>
+    )
+};
+
+// List all hunts created by the user
+const HuntList = (props) => {
+    const [hunts, setHunts] = useState(props.hunts);
+
+    useEffect(() => {
+        const loadHuntsFromServer = async () => {
+            const response = await fetch('/getUserHunts');
+            const data = await response.json();
+        };
+        loadHuntsFromServer();
+    }, [props.reloadHunts]);
+
+    if (hunts.length === 0) {
+        return (
+            <div>
+                <h3>You haven't made any Scavenger Hunts yet!</h3>
+            </div>
+        );
+    }
+
+    // TO-DO: Add task nodes field that handles task nodes
+    const taskNodes = tasks.map(task => {
+        return (
+            <div key={task.id}>
+                <h3>Task: {task.content}</h3>
+            </div>
+        );
+    });
+
+    const huntNodes = hunts.map(hunt => {
+        return (
+            <div key={hunt.id}>
+                <h3>Hunt Name: {hunt.name}</h3>
+                <div id='task-list'>
+                    {taskNodes}
+                </div>
+            </div>
+        );
+    });
+
+    return (
+        <div>
+            {huntNodes}
+        </div>
+    );
 };
