@@ -160,7 +160,14 @@ const App = () => {
 };
 
 const init = () => {
+    const makeTaskBtn = document.getElementById('makeTaskBtn');
     const root = createRoot(document.getElementById('app'));
+
+    makeTaskBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        root.render(< HuntForm />);
+        return false;
+    });
 
     root.render(<App />);
 }

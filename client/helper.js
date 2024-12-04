@@ -12,6 +12,13 @@ const sendPost = async (url, data, handler) => {
     
     // TO-DO: handle redirects and errors using conditionals
     // - Need to return back to previous function for adding tasks to hunts
+    if (result.redirect) {
+        window.location = result.redirect;
+    }
+
+    if (handler) {
+        handler();
+    }
 };
 
 module.exports = {
