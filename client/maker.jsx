@@ -46,7 +46,7 @@ const AddTaskItem = () => {
     const taskLabel = document.createElement('label');
     taskLabel.setAttribute('htmlFor', 'task');
     taskLabel.innerHTML = 'Task: ';
-    
+
     const taskInput = document.createElement('input');
     taskInput.setAttribute('type', 'text');
     taskInput.setAttribute('name', 'task');
@@ -60,7 +60,13 @@ const AddTaskItem = () => {
     document.querySelector('#tasks').appendChild(taskInput);
 };
 
+const addTask = () => {
+    incrementTask(taskAmt + 1);
+};
+
 const HuntForm = (props) => {
+    const [taskAmt, incrementTask] = useState(1);
+
     return (
         <form id='huntForm'
             onSubmit={(e) => handleHunt(e, props.triggerReload)}
@@ -78,10 +84,14 @@ const HuntForm = (props) => {
             <div>
                 <h3>Tasks:</h3>
                 <div id='tasks'>
-                    <label htmlFor='task'>Task: </label>
-                    <input type='text' name='task' placeholder='Enter task here!' />
+                    {Array.from({ length: taskAmt }, (_, index) => (
+                        <div>
+                            <label htmlFor='task'>Task #{item}: </label>
+                            <input type='text' name='task' placeholder='Enter task here!' />
+                        </div>
+                    ))}
                 </div>
-                <button onClick={AddTaskItem}>Add another task!</button>
+                <button onClick={addTask}>Add another task!</button>
             </div>
             <input type='submit' value='Make Hunt' />
         </form>
@@ -152,7 +162,7 @@ const App = () => {
 const init = () => {
     const root = createRoot(document.getElementById('app'));
 
-    root.render( <App /> );
+    root.render(<App />);
 }
 
 window.onload = init;
