@@ -47,7 +47,8 @@ const signup = async (req, res) => {
   }
 
   try {
-    const hash = await Account.genereateHash(pass);
+    const hash = await Account.generateHash(pass);
+    console.log('makes it here fine');
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
