@@ -13,3 +13,7 @@ const sendPost = async (url, data, handler) => {
     // TO-DO: handle redirects and errors using conditionals
     // - Need to return back to previous function for adding tasks to hunts
 };
+
+module.exports = {
+    sendPost,
+}
