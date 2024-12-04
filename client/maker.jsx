@@ -138,12 +138,11 @@ const HuntList = (props) => {
 const App = () => {
     const [reloadHunts, setReloadHunts] = useState(false);
 
+    // Only show hunts by default, add button to create new hunts
     return (
         <div>
-            <div id='makeHunts'>
-                <HuntForm triggerReload={() => setReloadHunts(!reloadHunts)} />
-            </div>
             <div id='hunts'>
+                <h3>My Hunts:</h3>
                 <HuntList hunts={[]} reloadHunts={reloadHunts} />
             </div>
         </div>
