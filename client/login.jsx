@@ -123,7 +123,7 @@ const init = (locals) => {
     } 
     // User is logged in
     else {
-        root.render( <SignupWindow /> );
+        root.render( <ChangePassWindow /> );
     }
 };
 

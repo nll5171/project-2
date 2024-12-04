@@ -130,3 +130,26 @@ const HuntList = (props) => {
         </div>
     );
 };
+
+const App = () => {
+    const [reloadHunts, setReloadHunts] = useState(false);
+
+    return (
+        <div>
+            <div id='makeHunts'>
+                <HuntForm triggerReload={() => setReloadHunts(!reloadHunts)} />
+            </div>
+            <div id='hunts'>
+                <HuntList hunts={[]} reloadHunts={reloadHunts} />
+            </div>
+        </div>
+    );
+};
+
+const init = () => {
+    const root = createRoot(document.getElementById('app'));
+
+    root.render( <App /> );
+}
+
+window.onload = init;

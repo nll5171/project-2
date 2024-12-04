@@ -7,39 +7,39 @@ const saltRounds = 10;
 let AccountModel = {};
 
 const AccountSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true,
-        match: /^[A-Za-z0-9_\-.]{1,16}$/,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-    huntAmt: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
-    premium: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now,
-    },
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+    match: /^[A-Za-z0-9_\-.]{1,16}$/,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  huntAmt: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  premium: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // Converts a doc to something we can store in redis
 AccountSchema.statics.toAPI = (doc) => ({
-    username: doc.username,
-    _id: doc._id,
-    premium: doc.premium,
-    huntAmt: doc.huntAmt,
+  username: doc.username,
+  _id: doc._id,
+  premium: doc.premium,
+  huntAmt: doc.huntAmt,
 });
 
 // Helper function to hash password
@@ -47,20 +47,20 @@ AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRou
 
 // Checks for correct password when logging in
 AccountSchema.statics.authenticate = async (username, password, callback) => {
-    try {
-        const doc = await AccountModel.findOne({ username }).exec();
-        if (!doc) {
-            return callback();  // Runs callback if no matching username
-        }
-
-        const match = await bcrypt.compare(password, doc.password);
-        if (match) {
-            return callback(null, doc);
-        }
-        return callback();
-    } catch (err) {
-        return callback(err);
+  try {
+    const doc = await AccountModel.findOne({ username }).exec();
+    if (!doc) {
+      return callback(); // Runs callback if no matching username
     }
+
+    const match = await bcrypt.compare(password, doc.password);
+    if (match) {
+      return callback(null, doc);
+    }
+    return callback();
+  } catch (err) {
+    return callback(err);
+  }
 };
 
 AccountModel = mongoose.model('Account', AccountSchema);
