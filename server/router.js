@@ -6,7 +6,7 @@ const router = (app) => {
   app.get('/getHunts', controllers.Hunt.getHunts);
   app.get('/getUserHunts', mid.requiresLogin, controllers.Hunt.getUserHunts);
 
-  app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('/login', mid.requiresSecure, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
   app.post('/signup', mid.requiresSecure, mid.requiresLogout, controllers.Account.signup);
@@ -24,6 +24,7 @@ const router = (app) => {
   app.get('/getSubmissions', mid.requiresLogin, controllers.Submission.getSubmissions);
   app.post('/makeSubmission', mid.requiresLogin, controllers.Submission.makeSubmission);
 
+  app.get('/isLoggedIn', controllers.Account.isLoggedIn);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

@@ -9,7 +9,7 @@ const requiresLogin = (req, res, next) => {
 // Can't do something unless you're not logged in
 const requiresLogout = (req, res, next) => {
   if (req.session.account) {
-    return res.redirect('/'); // Determine appropriate redirect
+    return res.redirect('/maker'); // Determine appropriate redirect
   }
   return next();
 };

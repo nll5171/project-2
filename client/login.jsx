@@ -98,14 +98,19 @@ const ChangePassWindow = (props) => {
 }
 
 // TO-DO: Be able to render Change Password page when logged in
-const init = (locals) => {
+const init = async () => {
     // Only render this stuff if you're not logged in
     // TO-DO: Create a .jsx for headers/footers and display with that
-    if (!locals.loggedIn) {
+    const response = await fetch('/isLoggedIn');
+    const data = await response.json();
+    console.log(data);
+    
+    const root = createRoot(document.getElementById('content'));
+    
+    if (!data.loggedIn) {
+        console.log('this runs first');
         const loginButton = document.getElementById('loginButton');
         const signupButton = document.getElementById('signupButton');
-
-        const root = createRoot(document.getElementById('content'));
 
         loginButton.addEventListener('click', (e) => {
             e.preventDefault();

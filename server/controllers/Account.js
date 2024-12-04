@@ -2,9 +2,14 @@ const models = require('../models');
 
 const { Account } = models;
 
-const loginPage = (req, res) => res.render('login', { loggedIn: false });
+const loginPage = (req, res) => res.render('login', { 'loggedIn': false });
 
-const changePassPage = (req, res) => res.render('login', { loggedIn: true });
+const changePassPage = (req, res) => res.render('login', { 'loggedIn': true });
+
+const isLoggedIn = (req, res) => {
+  const loggedIn = !!req.session.account;
+  return res.status(200).json({ loggedIn });
+};
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -28,7 +33,7 @@ const login = (req, res) => {
     req.session.account = Account.toAPI(account);
 
     // Move user to standard page
-    return res.json({ redirect: '/' });
+    return res.json({ redirect: '/maker' });
   });
 };
 
@@ -48,11 +53,11 @@ const signup = async (req, res) => {
 
   try {
     const hash = await Account.generateHash(pass);
-    console.log('makes it here fine');
     const newAccount = new Account({ username, password: hash });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/' }); // Change the redirect
+    console.log(req.session);
+    return res.json({ redirect: '/maker' }); // Change the redirect
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -83,6 +88,7 @@ const changePass = async (req, res) => {
 };
 
 module.exports = {
+  isLoggedIn,
   loginPage,
   login,
   logout,

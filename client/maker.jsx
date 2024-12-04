@@ -52,6 +52,10 @@ const AddTaskItem = () => {
     taskInput.setAttribute('name', 'task');
     taskInput.setAttribute('placeholder', 'Enter task here!');
 
+    // const parentDiv = document.createElement('div');
+    // parentDiv.appendChild(taskLabel);
+    // parentDiv.appendChild(taskInput);
+
     document.querySelector('#tasks').appendChild(taskLabel);
     document.querySelector('#tasks').appendChild(taskInput);
 };
@@ -76,8 +80,8 @@ const HuntForm = (props) => {
                 <div id='tasks'>
                     <label htmlFor='task'>Task: </label>
                     <input type='text' name='task' placeholder='Enter task here!' />
-                    <button onClick={AddTaskItem}>Add another task!</button>
                 </div>
+                <button onClick={AddTaskItem}>Add another task!</button>
             </div>
             <input type='submit' value='Make Hunt' />
         </form>
