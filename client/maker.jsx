@@ -125,9 +125,6 @@ const HuntList = (props) => {
         return (
             <div key={hunt.id}>
                 <h3>Hunt Name: {hunt.name}</h3>
-                <div id='task-list'>
-                    {taskNodes}
-                </div>
             </div>
         );
     });
