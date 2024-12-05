@@ -8,7 +8,7 @@ let premium = false;
 
 // Create the hunt first, then the individual tasks
 // Should redirect to user's collection once created
-const handleHunt = (e) => {
+const handleHunt = async (e) => {
     e.preventDefault();
 
     const name = e.target.querySelector('#huntName').value;
@@ -22,7 +22,7 @@ const handleHunt = (e) => {
     const tasks = [];
 
     // Iterate through every other child of tasks, since half are labels, half are inputs
-    for (let i = 1; i < taskElements.length; i++) {
+    for (let i = 0; i < taskElements.length; i++) {
         // First child is label, second is input
         const taskVal = taskElements[i].children[1].value;
 
@@ -37,8 +37,7 @@ const handleHunt = (e) => {
     console.log(tasks);
 
     // Get the Id of the hunt for use with task/item creation
-    const huntId = helper.sendPost(e.target.action, { name, deadline }).id;
-    console.log(huntId);
+    const huntId = await helper.sendPost(e.target.action, { name, deadline }).id;
 
     // Attempt to create each individual task/item
     for (let i = 0; i < tasks.length; i++) {
