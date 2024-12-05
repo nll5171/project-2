@@ -37,7 +37,7 @@ const handleHunt = async (e) => {
     // Get the Id of the hunt for use with task/item creation
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
         const huntId = result.id;
-        typeof(huntId);
+        console.log(typeof(huntId));
 
         // Attempt to create each individual task/item
         for (let i = 0; i < tasks.length; i++) {
