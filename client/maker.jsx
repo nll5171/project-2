@@ -72,7 +72,7 @@ const HuntForm = (props) => {
 
     return (
         <form id='huntForm'
-            onSubmit={(e) => handleHunt(e, props.triggerReload)}
+            onSubmit={(e) => handleHunt(e)}
             name='huntForm'
             action='/makeHunt'
             method='POST'
