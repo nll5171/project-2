@@ -38,7 +38,6 @@ const handleHunt = async (e) => {
 
     // Get the Id of the hunt for use with task/item creation
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
-        console.log(result);
         const huntId = result.id;
 
         // Attempt to create each individual task/item
@@ -100,6 +99,7 @@ const HuntList = (props) => {
         const loadHuntsFromServer = async () => {
             const response = await fetch('/getUserHunts');
             const data = await response.json();
+            setHunts(data.hunts);
         };
         loadHuntsFromServer();
     }, [props.reloadHunts]);

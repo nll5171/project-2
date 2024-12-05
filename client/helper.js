@@ -9,20 +9,22 @@ const sendPost = async (url, data, handler) => {
     });
 
     const result = await response.json();
-    console.log(result);
     
     // TO-DO: handle redirects and errors using conditionals
     // - Need to return back to previous function for adding tasks to hunts
     if (result.redirect) {
         window.location = result.redirect;
+        return false;
     }
 
     if (result.error) {
         console.log(result.error);
+        return false;
     }
 
     if (handler) {
         handler();
+        return false;
     }
 
     // so that I can call await on this function
