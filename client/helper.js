@@ -16,6 +16,10 @@ const sendPost = async (url, data, handler) => {
         window.location = result.redirect;
     }
 
+    if (result.error) {
+        console.log(result.error);
+    }
+
     if (handler) {
         handler();
     }
