@@ -113,13 +113,13 @@ const HuntList = (props) => {
     }
 
     // TO-DO: Add task nodes field that handles task nodes
-    const taskNodes = tasks.map(task => {
-        return (
-            <div key={task.id}>
-                <h3>Task: {task.content}</h3>
-            </div>
-        );
-    });
+    // const taskNodes = tasks.map(task => {
+    //     return (
+    //         <div key={task.id}>
+    //             <h3>Task: {task.content}</h3>
+    //         </div>
+    //     );
+    // });
 
     const huntNodes = hunts.map(hunt => {
         return (
