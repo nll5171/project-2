@@ -43,13 +43,13 @@ const handleHunt = async (e) => {
 
         // Attempt to create each individual task/item
         for (let i = 0; i < tasks.length; i++) {
-            promises.push(helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId }));
+            helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId });
         }
 
-        Promise.all(promises).then(() => {
-            return false;
-            // location.reload();   Once I know it works
-        })
+        // Promise.all(promises).then(() => {
+        //     return false;
+        //     // location.reload();   Once I know it works
+        // })
     });
 };
 
