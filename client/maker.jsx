@@ -21,7 +21,7 @@ const handleHunt = (e) => {
 
     // Iterate through all children of #tasks, store text inside task array
     for (let i = 0; i < taskElements.length; i++) {
-        tasks.add(taskElements[i].value);
+        tasks.push(taskElements[i].value);
 
         if (!name || !deadline || !tasks[i]) {
             // TO-DO: display error 'all fields are required!'
