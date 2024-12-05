@@ -14,10 +14,14 @@ const handleHunt = (e) => {
     const name = e.target.querySelector('#huntName').value;
     const deadline = e.target.querySelector('#huntDeadline').value;
 
+    console.log('pulling from task elements!');
+
     // Store all tasks in an array, pull from the <fieldset> element
     // https://www.w3schools.com/html/html_form_elements.asp
     const taskElements = e.target.querySelector('#tasks').children;
     const tasks = [];
+
+    console.log(taskElements);
 
     // Iterate through all children of #tasks, store text inside task array
     for (let i = 0; i < taskElements.length; i++) {
