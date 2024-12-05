@@ -24,7 +24,7 @@ const makeHunt = async (req, res) => {
     await newHunt.save().then((hunt) => {
       huntId = hunt._id
     });
-    return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: huntId });
+    return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: huntId, huntType: typeof(huntId) });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
