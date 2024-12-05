@@ -37,10 +37,9 @@ const handleHunt = async (e) => {
     console.log(tasks);
 
     // Get the Id of the hunt for use with task/item creation
-    const huntPromise = new Promise((resolve, reject) => {
-        resolve(helper.sendPost(e.target.action, { name, deadline }).id);
-    }).then((id) => {
-        console.log(huntId);
+    await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
+        console.log(result);
+        const huntId = result.id;
 
         // Attempt to create each individual task/item
         for (let i = 0; i < tasks.length; i++) {
@@ -50,7 +49,6 @@ const handleHunt = async (e) => {
         return false;
         //location.reload();    Once I can confirm this works properly
     });
-    //const huntId = await helper.sendPost(e.target.action, { name, deadline }).id;
 };
 
 const HuntForm = (props) => {
