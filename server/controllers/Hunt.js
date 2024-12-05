@@ -52,7 +52,7 @@ const getHunts = async (req, res) => {
 const getUserHunts = async (req, res) => {
   try {
     // Include completed hunts with their winners
-    const query = { deadline: { owner: req.session.account._id } };
+    const query = { owner: req.session.account._id };
     const docs = await Hunt.find(query).select('name deadline winner').lean().exec();
 
     return res.json({ hunts: docs });
