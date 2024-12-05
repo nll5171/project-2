@@ -25,7 +25,10 @@ const sendPost = async (url, data, handler) => {
         handler();
     }
 
-    return result;
+    // so that I can call await on this function
+    return new Promise((resolve) => {
+        resolve(result);
+    });
 };
 
 module.exports = {
