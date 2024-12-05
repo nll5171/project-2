@@ -19,11 +19,10 @@ const makeHunt = async (req, res) => {
 
   try {
     const newHunt = new Hunt(huntData);
+    let huntId;
     // save() should return the object, including the ObjectId which I need to make the tasks
-    await newHunt.save().then(hunt => {
-      return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: hunt._id });
-    });
-    //return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline,  });
+    await newHunt.save().then(hunt => huntId = hunt._id);
+    return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: huntId });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {

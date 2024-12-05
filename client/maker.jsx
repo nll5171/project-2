@@ -37,7 +37,7 @@ const handleHunt = (e) => {
     console.log(tasks);
 
     // Get the Id of the hunt for use with task/item creation
-    const huntId = helper.sendPost(e.target.action, { name, deadline });
+    const huntId = helper.sendPost(e.target.action, { name, deadline }).id;
     console.log(huntId);
 
     // Attempt to create each individual task/item
