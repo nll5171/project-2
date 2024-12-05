@@ -34,8 +34,6 @@ const handleHunt = async (e) => {
         tasks.push(taskVal);
     }
 
-    console.log(tasks);
-
     // Get the Id of the hunt for use with task/item creation
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
         const huntId = result.id;
@@ -51,6 +49,8 @@ const handleHunt = async (e) => {
         //     // location.reload();   Once I know it works
         // })
     });
+
+    return false;
 };
 
 const HuntForm = (props) => {
