@@ -1,3 +1,4 @@
+--Questions--
 ● What is the intended purpose of your application?
     This application is designed to be a hub for "Scavenger Hunts" so to speak. Basically, users can create
     scavenger hunts in which users need to scour the web to find websites that meet specific requirements.
@@ -43,3 +44,48 @@
     ○ What do the code fragments do? Where are they in your code?
     I don't believe I have any code fragments taken from anywhere at the moment, outside of using DomoMaker
     as a base for most of the MVC structure.
+
+--Endpoints--
+● /getHunts
+    ○ GET all the existing Scavenger Hunts in MongoDB, not just belonging to the user
+● /getUserHunts
+    ○ GET all the user's Scavenger Hunts. May change later to only ones that haven't ended
+        ■ Requires login
+● /login
+    ○ GET the login page. Since the user is logged out, displays the login form
+        ■ Requires secure
+    ○ POST. Attempts to login, redirecting to /maker if successful
+        ■ Requires logout, and requires secure
+        ■ Passes in username and password
+● /signup
+    ○ POST. Create the account from the signup form, and redirect to /maker if successful
+        ■ Requires logout, and requires secure
+        ■ Passes in username, password, and retyped password
+● /changePass
+    ○ GET the login page, but with the user being logged in, displays the changePass form
+        ■ Requires secure
+    ○ POST. Changes the password based on input from the changePass form. Redirects to /maker if successful
+        ■ Requires secure, and requires login
+        ■ Passes in username, password, and retyped password
+● /maker
+    ○ GET the page for viewing user's tasks and creating new ones.
+        ■ Requires login
+● /makeHunt
+    ○ POST. Create a new scavenger hunt based on the creation form. Will reload page if successful.
+        ■ Requires login
+        ■ Passes in a name and a deadline for the Scavenger Hunt
+● /makeItem
+    ○ POST. Create an item/task as part of the scavenger hunt. Not currently working at the moment.
+        ■ Requires login
+        ■ Passes in the task description, and the id of the parent scavenger hunt
+● /getSubmissions
+    ○ GET. Loads all submissions for a particular scavenger hunt from the current user.
+        ■ Requires login
+● /makeSubmission
+    ○ POST. Makes a submission for a given task of a given scavenger hunt. Untested at the moment.
+        ■ Requires login
+        ■ Passes in the id of the task in question, and the contents of the submission (the link basically).
+● /isLoggedIn
+    ○ GET info about the user, mostly for use with /changePass vs /login since they use the same .jsx file.
+      Will probably also include information about user being premium vs not.
+        ■ Requires login
