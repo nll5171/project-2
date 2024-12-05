@@ -23,6 +23,8 @@ const sendPost = async (url, data, handler) => {
     if (handler) {
         handler();
     }
+
+    return result;
 };
 
 module.exports = {

@@ -21,8 +21,6 @@ const handleHunt = (e) => {
     const taskElements = e.target.querySelector('#tasks').children;
     const tasks = [];
 
-    console.log(taskElements);
-
     // Iterate through every other child of tasks, since half are labels, half are inputs
     for (let i = 1; i < taskElements.length; i++) {
         // First child is label, second is input
@@ -36,7 +34,7 @@ const handleHunt = (e) => {
         tasks.push(taskVal);
     }
 
-    console.log('about to create hunt');
+    console.log(tasks);
 
     // Get the Id of the hunt for use with task/item creation
     const huntId = helper.sendPost(e.target.action, { name, deadline });
@@ -49,25 +47,6 @@ const handleHunt = (e) => {
 
     return false;
     //location.reload();    Once I can confirm this works properly
-};
-
-// Adds task item to the list
-const AddTaskItem = () => {
-    const taskLabel = document.createElement('label');
-    taskLabel.setAttribute('htmlFor', 'task');
-    taskLabel.innerHTML = 'Task: ';
-
-    const taskInput = document.createElement('input');
-    taskInput.setAttribute('type', 'text');
-    taskInput.setAttribute('name', 'task');
-    taskInput.setAttribute('placeholder', 'Enter task here!');
-
-    // const parentDiv = document.createElement('div');
-    // parentDiv.appendChild(taskLabel);
-    // parentDiv.appendChild(taskInput);
-
-    document.querySelector('#tasks').appendChild(taskLabel);
-    document.querySelector('#tasks').appendChild(taskInput);
 };
 
 const HuntForm = (props) => {
