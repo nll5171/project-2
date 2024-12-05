@@ -60,12 +60,12 @@ const AddTaskItem = () => {
     document.querySelector('#tasks').appendChild(taskInput);
 };
 
-const addTask = () => {
-    incrementTask(taskAmt + 1);
-};
-
 const HuntForm = (props) => {
     const [taskAmt, incrementTask] = useState(1);
+
+    const addTask = () => {
+        incrementTask(taskAmt + 1);
+    };
 
     return (
         <form id='huntForm'
