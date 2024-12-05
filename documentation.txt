@@ -1,0 +1,45 @@
+● What is the intended purpose of your application?
+    This application is designed to be a hub for "Scavenger Hunts" so to speak. Basically, users can create
+    scavenger hunts in which users need to scour the web to find websites that meet specific requirements.
+    For example, one of the sections could be to find a website where the third word of the second paragraph
+    is "help". Users could then try to complete the scavenger hunt and make submissions using links that the
+    creator could check to verify they meet the requirements. At the end of a deadline set by the creator of
+    the hunt, they could list the winner(s) of the scavenger hunt.
+● What work has been completed for this milestone?
+    Most of the backend code is complete, such as communicating to the server. What doesn't work at this point
+    is creating the tasks. Creating the parent hunt does work however, as does creating and managing your account
+● What work is left, and how do you plan to complete it?
+    I still need to work on fixing the task creation and submission to try and meet the tasks. I also need to
+    work on the front-end for the website, which I plan to complete using bootstrap.
+    ○ What does your timeline/roadmap look like to finish on time?
+        It's going to be tough, and will require me to grind things out for pretty much every day until it's due
+● How are you using React?
+    I'm using React when it comes to displaying the hunts and their individual tasks, as well as the form creation.
+    It has also helped to limit the number of additional pages I've needed to make
+    ○ What components have you made?
+        Components for each individual scavenger hunt
+    ○ What components do you still plan to add?
+        I need to add components for the individual tasks of each scavenger hunt, and the ability to make
+        submissions to these scavenger hunts, which will then need to be handled server-side and stored in Mongo
+● What data are you storing in MongoDB?
+    Four types of data: Accounts, Hunts, Items/Tasks, and Submissions. Each is fairly self-explanatory. The
+    Accounts are user accounts, the Hunts are the scavenger hunts, the Items are the components of these hunts,
+    and the Submissions are the user submitted results for each task.
+    ○ What data do you still need to store?
+        No additional data types need to be stored in Mongo as far as I can tell. Just need to have the
+        ability to add them functioning.
+● What is your profit model?
+    I plan to have a subscription model essentially. Maybe a one-time payment for a premium version that
+    lets the user create more elaborate Scavenger Hunts or have more Scavenger Hunts in the system.
+    ○ Have you implemented it yet?
+        ■ If so, how?
+        ■ If not, what is your plan to implement it?
+            For this project, it'll be a toggle that'll allow the user to create more than 10 Scavenger Hunts
+            and have more than 20 tasks in one Scavenger Hunt. I might change these values as needed however
+● Do you have a plan for going above and beyond? If so, what is it?
+    Main idea is to simply use Bootstrap or some other front-end framework to get the page looking nice.
+    If I come up with another option to go above and beyond, I'll try and do so.
+● If you used any borrowed code or code fragments, where did you get them from?
+    ○ What do the code fragments do? Where are they in your code?
+    I don't believe I have any code fragments taken from anywhere at the moment, outside of using DomoMaker
+    as a base for most of the MVC structure.
