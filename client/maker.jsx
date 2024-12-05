@@ -86,7 +86,7 @@ const HuntForm = (props) => {
                 <div id='tasks'>
                     {Array.from({ length: taskAmt }, (_, index) => (
                         <div>
-                            <label htmlFor='task'>Task #{index}: </label>
+                            <label htmlFor='task'>Task #{index + 1}: </label>
                             <input type='text' name='task' placeholder='Enter task here!' />
                         </div>
                     ))}
