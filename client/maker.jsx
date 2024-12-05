@@ -24,13 +24,16 @@ const handleHunt = (e) => {
     console.log(taskElements);
 
     // Iterate through every other child of tasks, since half are labels, half are inputs
-    for (let i = 1; i < taskElements.length; i += 2) {
-        if (!name || !deadline || !taskElements[i].value) {
+    for (let i = 1; i < taskElements.length; i++) {
+        // First child is label, second is input
+        const taskVal = taskElements[i].children[1].value;
+
+        if (!name || !deadline || !taskVal) {
             // TO-DO: display error 'all fields are required!'
             return false;
         }
 
-        tasks.push(taskElements[i].value);
+        tasks.push(taskVal);
     }
 
     console.log('about to create hunt');
@@ -98,7 +101,10 @@ const HuntForm = (props) => {
                         </div>
                     ))}
                 </div>
-                <button onClick={addTask}>Add another task!</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    addTask();
+                }}>Add another task!</button>
             </div>
             <input type='submit' value='Make Hunt' />
         </form>
