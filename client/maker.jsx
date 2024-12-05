@@ -21,16 +21,19 @@ const handleHunt = (e) => {
 
     // Iterate through all children of #tasks, store text inside task array
     for (let i = 0; i < taskElements.length; i++) {
-        tasks.push(taskElements[i].value);
-
-        if (!name || !deadline || !tasks[i]) {
+        if (!name || !deadline || !taskElements[i].value) {
             // TO-DO: display error 'all fields are required!'
             return false;
         }
+
+        tasks.push(taskElements[i].value);
     }
+
+    console.log('about to create hunt');
 
     // Get the Id of the hunt for use with task/item creation
     const huntId = helper.sendPost(e.target.action, { name, deadline });
+    console.log(huntId);
 
     // Attempt to create each individual task/item
     for (let i = 0; i < tasks.length; i++) {
@@ -71,7 +74,7 @@ const HuntForm = (props) => {
         <form id='huntForm'
             onSubmit={(e) => handleHunt(e, props.triggerReload)}
             name='huntForm'
-            action='/maker'
+            action='/makeHunt'
             method='POST'
         >
             <div>
