@@ -2,9 +2,9 @@ const models = require('../models');
 
 const { Account } = models;
 
-const loginPage = (req, res) => res.render('login', { 'loggedIn': false });
+const loginPage = (req, res) => res.render('login', { loggedIn: false });
 
-const changePassPage = (req, res) => res.render('login', { 'loggedIn': true });
+const changePassPage = (req, res) => res.render('login', { loggedIn: true });
 
 const isLoggedIn = (req, res) => {
   const loggedIn = !!req.session.account;

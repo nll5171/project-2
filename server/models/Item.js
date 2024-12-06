@@ -33,7 +33,4 @@ const ItemSchema = new mongoose.Schema({
 
 const ItemModel = mongoose.model('Item', ItemSchema);
 
-module.exports = {
-  ItemSchema,
-  ItemModel,
-};
+module.exports = ItemModel;

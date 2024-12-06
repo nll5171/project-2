@@ -2,7 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 
 // Stores whether the user is a premium user or not
 let premium = false;
@@ -37,7 +37,8 @@ const handleHunt = async (e) => {
 
     // Get the Id of the hunt for use with task/item creation
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
-        const huntId = new mongoose.Types.ObjectId(result.id);
+        //const huntId = new mongoose.Types.ObjectId(result.id);
+        const huntId = result.id;
         console.log(typeof(huntId));
 
         // Attempt to create each individual task/item
@@ -75,7 +76,7 @@ const HuntForm = (props) => {
                 <div id='tasks'>
                     {Array.from({ length: taskAmt }, (_, index) => (
                         <div>
-                            <label htmlFor='task'>Task #{index + 1}: </label>
+                            <label key={index} htmlFor='task'>Task #{index + 1}: </label>
                             <input type='text' name='task' placeholder='Enter task here!' />
                         </div>
                     ))}
