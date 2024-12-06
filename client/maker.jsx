@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
+const Navigation = require('./components/navbar.jsx');
 //const mongoose = require('mongoose');
 
 // Stores whether the user is a premium user or not
@@ -39,14 +40,17 @@ const handleHunt = async (e) => {
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
         //const huntId = new mongoose.Types.ObjectId(result.id);
         const huntId = result.id;
-        console.log(typeof(huntId));
+        let promises = [];
 
         // Attempt to create each individual task/item
         for (let i = 0; i < tasks.length; i++) {
-            const a = helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId });
+            promises.push(helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId }));
         }
 
-        return false;
+        Promise.all(promises).then(() => {
+            // Refresh page
+            location.reload();
+        })
     });
 };
 
@@ -112,16 +116,7 @@ const HuntList = (props) => {
         );
     }
 
-    // TO-DO: Add task nodes field that handles task nodes
-    // const taskNodes = tasks.map(task => {
-    //     return (
-    //         <div key={task.id}>
-    //             <h3>Task: {task.content}</h3>
-    //         </div>
-    //     );
-    // });
-
-    const huntNodes = hunts.map(hunt => {
+    const HuntNodes = hunts.map(hunt => {
         return (
             <div key={hunt.id}>
                 <h3>Hunt Name: {hunt.name}</h3>
@@ -131,7 +126,7 @@ const HuntList = (props) => {
 
     return (
         <div>
-            {huntNodes}
+            {HuntNodes}
         </div>
     );
 };

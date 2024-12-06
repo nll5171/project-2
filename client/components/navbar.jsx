@@ -3,8 +3,8 @@ const Nav = require('react-bootstrap/Nav');
 const Navbar = require('react-bootstrap/Navbar');
 const Container = require('react-bootstrap/Container');
 
-const LoginOptions = ( {loggedIn, premium} ) => {
-    if(loggedIn) {
+const LoginOptions = (props) => {
+    if(props.loggedIn) {
         return (
             <Nav className='justify-content-end'>
                 <Nav.Link href='/changePass'>Change Password</Nav.Link>
@@ -20,7 +20,7 @@ const LoginOptions = ( {loggedIn, premium} ) => {
     );
 }
 
-const Navigation = ( {loggedIn, premium} ) => {
+const Navigation = (props) => {
     return (
         <Navbar expand='lg'>
             <Container>
@@ -31,7 +31,7 @@ const Navigation = ( {loggedIn, premium} ) => {
                         <Nav.Link href='/explore'>Explore</Nav.Link>
                         <Nav.Link href='/maker'>Create</Nav.Link>
                     </Nav>
-                    <LoginOptions loggedIn={loggedIn} premium={premium}/>
+                    <LoginOptions loggedIn={props.loggedIn} premium={props.premium}/>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
