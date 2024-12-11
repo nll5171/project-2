@@ -20,6 +20,8 @@ const router = (app) => {
   app.post('/makeHunt', mid.requiresLogin, controllers.Hunt.makeHunt);
   app.post('/makeItem', mid.requiresLogin, controllers.Item.makeItem);
 
+  app.post('/setPremium', mid.requiresLogin, controllers.Account.enablePremium);
+
   // TO-DO: Add functionality for hunt submissions
   app.get('/getSubmissions', mid.requiresLogin, controllers.Submission.getSubmissions);
   app.post('/makeSubmission', mid.requiresLogin, controllers.Submission.makeSubmission);

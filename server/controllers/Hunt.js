@@ -2,7 +2,7 @@ const models = require('../models');
 
 const { Hunt } = models;
 
-// Constants for hunt amounts (free vs. premium)
+// // Constants for hunt amounts (free vs. premium)
 const maxHuntsFree = 10;
 const maxHuntsPremium = 50;
 
@@ -10,7 +10,7 @@ const makerPage = async (req, res) => res.render('app');
 
 // Create a new Scavenger Hunt with the tasks provided
 const makeHunt = async (req, res) => {
-  // Ensure user hasn't made the maximum amount of scavenger hunts
+  //Ensure user hasn't made the maximum amount of scavenger hunts
   if ((!req.session.account.premium && req.session.account.huntAmt >= maxHuntsFree)
     || (req.session.account.premium && req.session.account.huntAmt >= maxHuntsPremium)) {
     return res.status(400).json({ error: 'Maximum amount of hunts reached. Please delete one before creating another!' });
@@ -29,8 +29,9 @@ const makeHunt = async (req, res) => {
 
   try {
     const newHunt = new Hunt(huntData);
-    await newHunt.save();
-    return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline });
+    await newHunt.save().then((_id) => {
+      return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: _id });
+    });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -45,7 +46,7 @@ const getHunts = async (req, res) => {
   try {
     // Only search for ongoing hunts
     const query = { deadline: { $gt: Date.now } };
-    const docs = await Hunt.find(query).select('name owner deadline').lean().exec();
+    const docs = await Hunt.find(query).select('name owner deadline _id').lean().exec();
 
     return res.json({ hunts: docs });
   } catch (err) {
@@ -58,8 +59,8 @@ const getHunts = async (req, res) => {
 const getUserHunts = async (req, res) => {
   try {
     // Include completed hunts with their winners
-    const query = { deadline: { owner: req.session.account._id } };
-    const docs = await Hunt.find(query).select('name deadline winner').lean().exec();
+    const query = { owner: req.session.account._id };
+    const docs = await Hunt.find(query).select('name deadline winner _id').lean().exec();
 
     return res.json({ hunts: docs });
   } catch (err) {
