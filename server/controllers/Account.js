@@ -11,6 +11,11 @@ const isLoggedIn = (req, res) => {
   return res.status(200).json({ loggedIn });
 };
 
+const getUserInfo = (req, res) => res.status(200).json({
+  premium: req.session.account.premium,
+  huntAmt: req.session.account.huntAmt,
+});
+
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
@@ -95,4 +100,5 @@ module.exports = {
   signup,
   changePassPage,
   changePass,
+  getUserInfo,
 };

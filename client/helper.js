@@ -9,8 +9,6 @@ const sendPost = async (url, data, handler) => {
     });
 
     const result = await response.json();
-
-    console.log(result);
     
     if (result.redirect) {
         window.location = result.redirect;

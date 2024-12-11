@@ -15,7 +15,7 @@
   \**************************/
 /***/ ((module) => {
 
-eval("// Sends post requests to the server using fetch\nconst sendPost = async (url, data, handler) => {\n  const response = await fetch(url, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json'\n    },\n    body: JSON.stringify(data)\n  });\n  const result = await response.json();\n  console.log(result);\n  if (result.redirect) {\n    window.location = result.redirect;\n    return false;\n  }\n  if (result.error) {\n    console.log(result.error);\n    return false;\n  }\n  if (handler) {\n    handler();\n    return false;\n  }\n  return result;\n};\nmodule.exports = {\n  sendPost\n};\n\n//# sourceURL=webpack://project-2/./client/helper.js?");
+eval("// Sends post requests to the server using fetch\nconst sendPost = async (url, data, handler) => {\n  const response = await fetch(url, {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json'\n    },\n    body: JSON.stringify(data)\n  });\n  const result = await response.json();\n  if (result.redirect) {\n    window.location = result.redirect;\n    return false;\n  }\n  if (result.error) {\n    console.log(result.error);\n    return false;\n  }\n  if (handler) {\n    handler();\n    return false;\n  }\n  return result;\n};\nmodule.exports = {\n  sendPost\n};\n\n//# sourceURL=webpack://project-2/./client/helper.js?");
 
 /***/ }),
 

@@ -25,6 +25,8 @@ const router = (app) => {
   app.post('/makeSubmission', mid.requiresLogin, controllers.Submission.makeSubmission);
 
   app.get('/isLoggedIn', controllers.Account.isLoggedIn);
+  app.get('/getUserInfo', controllers.Account.getUserInfo);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

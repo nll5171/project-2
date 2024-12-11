@@ -2,16 +2,16 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
-const Navigation = require('./components/navbar.jsx');
+//const Navigation = require('./components/navbar.jsx');
 const Form = require('react-bootstrap/Form');
 const Button = require('react-bootstrap/Button');
-//const mongoose = require('mongoose');
 
 // Stores whether the user is a premium user or not
-let premium = false;
+let premium;
+let taskLimitReached = false;
+const freeTaskLimit = 10;
+const premiumTaskLimit = 50;
 
-// Create the hunt first, then the individual tasks
-// Should redirect to user's collection once created
 const handleHunt = async (e) => {
     e.preventDefault();
 
@@ -27,7 +27,6 @@ const handleHunt = async (e) => {
 
     // Iterate through every other child of tasks, since half are labels, half are inputs
     for (let i = 0; i < taskElements.length; i++) {
-        // First child is label, second is input
         const taskVal = taskElements[i].children[1].value;
 
         if (!name || !deadline || !taskVal) {
@@ -40,27 +39,42 @@ const handleHunt = async (e) => {
 
     // Get the Id of the hunt for use with task/item creation
     await helper.sendPost(e.target.action, { name, deadline }).then((result) => {
-        //const huntId = new mongoose.Types.ObjectId(result.id);
         const huntId = result.id;
         let promises = [];
 
-        // Attempt to create each individual task/item
         for (let i = 0; i < tasks.length; i++) {
             promises.push(helper.sendPost('/makeItem', { task: tasks[i], hunt: huntId }));
         }
 
         Promise.all(promises).then(() => {
-            // Refresh page
             location.reload();
         })
     });
 };
 
+const ErrorForm = (props) => {
+    if (props.limitReached) {
+        return <p>{props.message}</p>
+    }
+
+    else {
+        return null;
+    }
+}
+
 const HuntForm = (props) => {
     const [taskAmt, incrementTask] = useState(1);
 
+    // Can only increase taskAmt while less than minimum
     const addTask = () => {
-        incrementTask(taskAmt + 1);
+        if ((!premium && taskAmt < freeTaskAmt)
+            || (premium && taskAmt < premiumTaskAmt)) {
+            incrementTask(taskAmt + 1);
+        }
+
+        else {
+            taskLimitReached = true;
+        }
     };
 
     return (
@@ -86,6 +100,7 @@ const HuntForm = (props) => {
                             <input type='text' name='task' placeholder='Enter task here!' />
                         </div>
                     ))}
+                    <ErrorForm limitReached={taskLimitReached} message={'Maximum tasks added! Feel free to edit the tasks, but you can\'t add any more!'}></ErrorForm>
                 </div>
                 <button onClick={(e) => {
                     e.preventDefault();
@@ -96,28 +111,63 @@ const HuntForm = (props) => {
         </form>
     );
 
-    return (
-        <Form id>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                </Form.Text>
-            </Form.Group>
+    // return (
+    //     <Form id="huntForm"
+    //         onSubmit={(e) => handleHunt(e)}
+    //         name="huntForm"
+    //         action="/makeHunt"
+    //         method="POST"
+    //     >
+    //         <Row className="mb-4">
+    //             <Container className="mb-2">
+    //                 <h3 className="border-bottom">Scavenger Hunt Overview</h3>
+    //             </Container>
+    //             <Form.Group as={Col} controlId="formGridEmail">
+    //                 <Form.Label>Hunt Name</Form.Label>
+    //                 <Form.Control size="lg" type="text" placeholder="Enter name of Scavenger Hunt!" />
+    //             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-        </Form>
-    );
+    //             <Form.Group as={Col} controlId="formGridPassword">
+    //                 <Form.Label>Deadline</Form.Label>
+    //                 <Form.Control size="lg" type="date" />
+    //             </Form.Group>
+    //         </Row>
+
+    //         <div className="mb-3 border-bottom">
+    //             <Row>
+    //                 <Container className="mb-2">
+    //                     <h3 className="border-bottom">Task Details</h3>
+    //                 </Container>
+    //             </Row>
+
+    //             <Row className="mb-3">
+    //                 <Form.Label column lg={1}>
+    //                     Task #1
+    //                 </Form.Label>
+    //                 <Col>
+    //                     <Form.Control type="text" placeholder="Enter task info!" />
+    //                 </Col>
+    //             </Row>
+
+    //             <Row className="mb-3">
+    //                 <Form.Label column lg={1}>
+    //                     Task #2
+    //                 </Form.Label>
+    //                 <Col>
+    //                     <Form.Control type="text" placeholder="Enter task info!" />
+    //                 </Col>
+    //             </Row>
+
+    //             <Button variant="secondary" type="button" className="mb-2">
+    //                 Add another task!
+    //             </Button>
+    //         </div>
+
+    //         <Button variant="secondary" type="submit" size="lg">
+    //             Create Scavenger Hunt
+    //         </Button>
+    //     </Form>
+    // );
 };
 
 // List all hunts created by the user
@@ -160,9 +210,18 @@ const App = () => {
     const [reloadHunts, setReloadHunts] = useState(false);
 
     // Only show hunts by default, add button to create new hunts
+    // return (
+    //     <div>
+    //         <Navigation loggedIn={false} premium={false} />
+    //         <div id='hunts'>
+    //             <h3>My Hunts:</h3>
+    //             <HuntList hunts={[]} reloadHunts={reloadHunts} />
+    //         </div>
+    //     </div>
+    // );
+
     return (
         <div>
-            <Navigation loggedIn={false} premium={false} />
             <div id='hunts'>
                 <h3>My Hunts:</h3>
                 <HuntList hunts={[]} reloadHunts={reloadHunts} />
@@ -171,7 +230,13 @@ const App = () => {
     );
 };
 
-const init = () => {
+const init = async () => {
+    // Load info about the user and store it in variables before loading the page
+    // const response = await fetch('/getUserInfo');
+    // const userInfo = await response.json();
+
+    // premium = userInfo.premium;
+
     const makeTaskBtn = document.getElementById('makeTaskBtn');
     const root = createRoot(document.getElementById('app'));
 
