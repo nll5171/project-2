@@ -10,7 +10,7 @@ const makerPage = async (req, res) => res.render('app');
 
 // Create a new Scavenger Hunt with the tasks provided
 const makeHunt = async (req, res) => {
-  //Ensure user hasn't made the maximum amount of scavenger hunts
+  // Ensure user hasn't made the maximum amount of scavenger hunts
   if ((!req.session.account.premium && req.session.account.huntAmt >= maxHuntsFree)
     || (req.session.account.premium && req.session.account.huntAmt >= maxHuntsPremium)) {
     return res.status(400).json({ error: 'Maximum amount of hunts reached. Please delete one before creating another!' });
@@ -29,9 +29,11 @@ const makeHunt = async (req, res) => {
 
   try {
     const newHunt = new Hunt(huntData);
-    await newHunt.save().then((_id) => {
-      return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline, id: _id });
-    });
+    await newHunt.save().then((_id) => res.status(201).json({
+      name: newHunt.name,
+      deadline: newHunt.deadline,
+      id: _id,
+    }));
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -39,6 +41,8 @@ const makeHunt = async (req, res) => {
     }
     return res.status(500).json({ error: 'An error occurred making this Scavenger Hunt!' });
   }
+
+  return res.status(500).json({ error: 'An error occurred making this Scavenger Hunt!' });
 };
 
 // Gets all ongoing scavenger hunts, ignores completed ones

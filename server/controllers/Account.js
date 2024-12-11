@@ -44,13 +44,16 @@ const login = (req, res) => {
 
 const enablePremium = async (req, res) => {
   try {
-    await Account.findByIdAndUpdate(req.session.account._id, { premium: req.body.premium }).lean().exec();
+    await Account.findByIdAndUpdate(
+      req.session.account._id,
+      { premium: req.body.premium },
+    ).lean().exec();
     req.session.account.premium = req.body.premium;
-    return res.json({  });
+    return res.json({ });
   } catch (err) {
     return res.status(500).json({ error: 'An error occurred!' });
   }
-}
+};
 
 // Create a new account for the user
 const signup = async (req, res) => {
