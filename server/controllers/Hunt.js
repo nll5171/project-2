@@ -2,10 +2,20 @@ const models = require('../models');
 
 const { Hunt } = models;
 
+// Constants for hunt amounts (free vs. premium)
+const maxHuntsFree = 10;
+const maxHuntsPremium = 50;
+
 const makerPage = async (req, res) => res.render('app');
 
 // Create a new Scavenger Hunt with the tasks provided
 const makeHunt = async (req, res) => {
+  // Ensure user hasn't made the maximum amount of scavenger hunts
+  if ((!req.session.account.premium && req.session.account.huntAmt >= maxHuntsFree)
+    || (req.session.account.premium && req.session.account.huntAmt >= maxHuntsPremium)) {
+    return res.status(400).json({ error: 'Maximum amount of hunts reached. Please delete one before creating another!' });
+  }
+
   if (!req.body.name || !req.body.deadline) {
     return res.status(400).json({ error: 'Scavenger Hunt requires a name, tasks, and a deadline!' });
   }
@@ -19,14 +29,8 @@ const makeHunt = async (req, res) => {
 
   try {
     const newHunt = new Hunt(huntData);
-    let huntId;
-    // save() should return the object, including the ObjectId which I need to make the tasks
-    await newHunt.save().then((hunt) => {
-      huntId = hunt._id;
-    });
-    return res.status(201).json({
-      name: newHunt.name, deadline: newHunt.deadline, id: huntId, huntType: typeof (huntId),
-    });
+    await newHunt.save();
+    return res.status(201).json({ name: newHunt.name, deadline: newHunt.deadline });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -54,7 +58,7 @@ const getHunts = async (req, res) => {
 const getUserHunts = async (req, res) => {
   try {
     // Include completed hunts with their winners
-    const query = { owner: req.session.account._id };
+    const query = { deadline: { owner: req.session.account._id } };
     const docs = await Hunt.find(query).select('name deadline winner').lean().exec();
 
     return res.json({ hunts: docs });
