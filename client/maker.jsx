@@ -8,7 +8,7 @@ const { useId } = React;
 let premium;
 let taskLimitReached = false;
 const freeTaskLimit = 10;
-const premiumTaskLimit = 50;
+const premiumTaskLimit = 25;
 
 let huntAmt;
 
@@ -56,7 +56,7 @@ const removeHunt = async (id) => {
 }
 
 const enablePremium = async () => {
-    await helper.sendPost('/setPremium', { premium: true });
+    await helper.sendPost('/setPremium', { isPremium: !premium, pathname: location.pathname });
     return false;
 };
 
@@ -115,8 +115,12 @@ const HuntForm = (props) => {
                 adjTask(taskAmt + 1);
         }
 
-        else {
+        else if (!taskLimitReached) {
             taskLimitReached = true;
+            const msg = (premium) ? 'Task limit reached! Please remove a task before creating the Scavenger Hunt!'
+                : 'Task limit reached! Please upgrade to premium to add more tasks to the Scavenger Hunt!';
+
+            helper.showError('#task-info', msg);
         }
     };
 
@@ -129,6 +133,7 @@ const HuntForm = (props) => {
             taskLimitReached = false;
         }
         adjTask(taskAmt - 1);
+        helper.hideErrors();
     }
 
     return (
@@ -165,7 +170,7 @@ const HuntForm = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className='mb-4'>
+                <div className='mb-4' id='task-info'>
                     <div className='row'>
                         <h3 className='border-bottom'>Task Details</h3>
                     </div>

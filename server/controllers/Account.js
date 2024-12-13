@@ -46,10 +46,10 @@ const enablePremium = async (req, res) => {
   try {
     await Account.findByIdAndUpdate(
       req.session.account._id,
-      { premium: req.body.premium },
+      { premium: req.body.isPremium },
     ).lean().exec();
     req.session.account.premium = req.body.premium;
-    return res.json({ });
+    return res.json({ redirect: req.body.pathname });
   } catch (err) {
     return res.status(500).json({ error: 'An error occurred!' });
   }
