@@ -6,6 +6,8 @@ const router = (app) => {
   app.get('/getHunts', controllers.Hunt.getHunts);
   app.get('/getUserHunts', mid.requiresLogin, controllers.Hunt.getUserHunts);
 
+  app.get('/getItems', controllers.Item.getItems);
+
   app.get('/login', mid.requiresSecure, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
 
@@ -19,6 +21,10 @@ const router = (app) => {
   app.get('/maker', mid.requiresLogin, controllers.Hunt.makerPage);
   app.post('/makeHunt', mid.requiresLogin, controllers.Hunt.makeHunt);
   app.post('/makeItem', mid.requiresLogin, controllers.Item.makeItem);
+
+  app.post('/removeHunt', mid.requiresLogin, controllers.Hunt.removeHunt);
+
+  app.post('/changeHuntAmt', mid.requiresLogin, controllers.Account.changeHuntAmt);
 
   app.post('/setPremium', mid.requiresLogin, controllers.Account.enablePremium);
 

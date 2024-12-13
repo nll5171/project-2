@@ -27,6 +27,10 @@ const HuntSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  tasks: {
+    type: [String],
+    required: true,
+  },
   winner: {
     type: mongoose.Schema.ObjectId,
     ref: 'Account',

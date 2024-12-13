@@ -31,8 +31,8 @@ const makeItem = async (req, res) => {
 // Get the items of the current task
 const getItems = async (req, res) => {
   try {
-    const query = { hunt: req.query.id };
-    const docs = await Item.find(query).select('task').lean().exec();
+    const query = { hunt: req.query._id, owner: req.session.account._id };
+    const docs = await Item.find(query).select('task _id').lean().exec();
 
     return res.json({ items: docs });
   } catch (err) {

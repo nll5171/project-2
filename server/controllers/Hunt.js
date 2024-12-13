@@ -16,7 +16,7 @@ const makeHunt = async (req, res) => {
     return res.status(400).json({ error: 'Maximum amount of hunts reached. Please delete one before creating another!' });
   }
 
-  if (!req.body.name || !req.body.deadline) {
+  if (!req.body.name || !req.body.deadline || !req.body.tasks) {
     return res.status(400).json({ error: 'Scavenger Hunt requires a name, tasks, and a deadline!' });
   }
 
@@ -24,16 +24,22 @@ const makeHunt = async (req, res) => {
   const huntData = {
     name: req.body.name,
     deadline: req.body.deadline,
+    tasks: req.body.tasks,
     owner: req.session.account._id,
   };
 
   try {
     const newHunt = new Hunt(huntData);
-    await newHunt.save().then((_id) => res.status(201).json({
+    let id;
+    await newHunt.save().then((hunt) => {
+      id = hunt._id;
+    });
+    return res.status(201).json({
       name: newHunt.name,
       deadline: newHunt.deadline,
-      id: _id,
-    }));
+      id,
+      tasks: newHunt.tasks,
+    });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -41,17 +47,28 @@ const makeHunt = async (req, res) => {
     }
     return res.status(500).json({ error: 'An error occurred making this Scavenger Hunt!' });
   }
-
-  return res.status(500).json({ error: 'An error occurred making this Scavenger Hunt!' });
 };
+
+const removeHunt = async (req, res) => {
+  if (!req.body.id) {
+    return res.status(400).json({ error: 'Hunt ID required to delete!' });
+  }
+
+  try {
+    await Hunt.findByIdAndDelete(req.body.id);
+    return res.json({ redirect: '/maker' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong when removing hunt!' });
+  }
+}
 
 // Gets all ongoing scavenger hunts, ignores completed ones
 const getHunts = async (req, res) => {
   try {
     // Only search for ongoing hunts
     const query = { deadline: { $gt: Date.now } };
-    const docs = await Hunt.find(query).select('name owner deadline _id').lean().exec();
-
+    const docs = await Hunt.find(query).select('name owner deadline _id tasks').lean().exec();
     return res.json({ hunts: docs });
   } catch (err) {
     console.log(err);
@@ -64,8 +81,7 @@ const getUserHunts = async (req, res) => {
   try {
     // Include completed hunts with their winners
     const query = { owner: req.session.account._id };
-    const docs = await Hunt.find(query).select('name deadline winner _id').lean().exec();
-
+    const docs = await Hunt.find(query).select('name deadline winner _id tasks').lean().exec();
     return res.json({ hunts: docs });
   } catch (err) {
     console.log(err);
@@ -78,4 +94,5 @@ module.exports = {
   makeHunt,
   getHunts,
   getUserHunts,
+  removeHunt,
 };

@@ -105,6 +105,21 @@ const changePass = async (req, res) => {
   }
 };
 
+// Update the number of hunts the user has made
+const changeHuntAmt = async (req, res) => {
+  try {
+    await Account.findByIdAndUpdate(
+      req.session.account._id,
+      { huntAmt: req.body.newAmt },
+    ).lean().exec();
+    req.session.account.huntAmt = req.body.newAmt;
+    return res.json({ redirect: '/maker' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong while updating hunt count!' });
+  }
+};
+
 module.exports = {
   isLoggedIn,
   loginPage,
@@ -115,4 +130,5 @@ module.exports = {
   changePass,
   getUserInfo,
   enablePremium,
+  changeHuntAmt,
 };
