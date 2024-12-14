@@ -35,6 +35,8 @@ const router = (app) => {
   app.get('/isLoggedIn', controllers.Account.isLoggedIn);
   app.get('/getUserInfo', controllers.Account.getUserInfo);
 
+  app.get('/explore', controllers.Hunt.explorePage);
+
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 };
 

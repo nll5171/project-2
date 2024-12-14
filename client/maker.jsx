@@ -27,11 +27,10 @@ const handleHunt = async (e) => {
 
     // Iterate through every other child of tasks, since half are labels, half are inputs
     for (let i = 0; i < taskElements.length; i++) {
-        console.log(taskElements[i]);
         const taskVal = taskElements[i].children[0].children[1].value;
 
         if (!name || !deadline || !taskVal) {
-            // TO-DO: display error 'all fields are required!'
+            helper.showError('All fields are required!');
             return false;
         }
 
@@ -55,7 +54,7 @@ const removeHunt = async (id) => {
     });
 }
 
-const enablePremium = async () => {
+const togglePremium = async () => {
     await helper.sendPost('/setPremium', { isPremium: !premium, pathname: location.pathname });
     return false;
 };
@@ -86,7 +85,7 @@ const Navigation = () => {
                             <a className="nav-link" href="/logout">Logout</a>
                         </li>
                         <li>
-                            <button className='btn btn-secondary' onClick={enablePremium}>Enable Premium</button>
+                            <button className='btn btn-secondary' onClick={togglePremium}>{premium ? "Disable Premium" : "Enable Premium"}</button>
                         </li>
                     </ul>
                 </div>
@@ -95,14 +94,12 @@ const Navigation = () => {
     );
 };
 
-const ErrorForm = (props) => {
-    if (props.limitReached) {
-        return <p>{props.message}</p>
-    }
-
-    else {
-        return null;
-    }
+const ErrorContent = () => {
+    return (
+        <div className='row mt-2 d-none' id='error-div'>
+            <p className='text-danger' id='error-msg'>No error message here yet.</p>
+        </div>
+    );
 };
 
 const HuntForm = (props) => {
@@ -120,7 +117,8 @@ const HuntForm = (props) => {
             const msg = (premium) ? 'Task limit reached! Please remove a task before creating the Scavenger Hunt!'
                 : 'Task limit reached! Please upgrade to premium to add more tasks to the Scavenger Hunt!';
 
-            helper.showError('#task-info', msg);
+            //helper.showError('#task-info', msg);
+            helper.showError(msg);
         }
     };
 
@@ -204,6 +202,7 @@ const HuntForm = (props) => {
                             }}>Add another task!</button>
                         </div>
                     </div>
+                    <ErrorContent />
                 </div>
                 <div className='row'>
                     <div className='col text-center'>
@@ -231,7 +230,7 @@ const HuntList = (props) => {
 
     if (hunts.length === 0) {
         return (
-            <h3>You haven't made any Scavenger Hunts yet!</h3>
+            <p>You haven't made any Scavenger Hunts yet!</p>
         );
     }
 
@@ -279,7 +278,7 @@ const HuntList = (props) => {
 
 const renderForm = (e) => {
     e.preventDefault();
-    root.render(<FormApp />)
+    root.render(<FormApp />);
 }
 
 const App = () => {
@@ -297,6 +296,7 @@ const App = () => {
                 <div id='hunts' className='row mt-3'>
                     <h3><u>My Scavenger Hunts</u></h3>
                     <HuntList hunts={[]} triggerReload={() => setReloadHunts(!reloadHunts)} />
+                    <ErrorContent />
                 </div>
             </div>
         </div>
@@ -324,7 +324,6 @@ const init = async () => {
     premium = userInfo.premium;
     huntAmt = userInfo.huntAmt;
 
-    const makeTaskBtn = document.getElementById('makeTaskBtn');
     root = createRoot(document.getElementById('app'));
 
     root.render(<App />);

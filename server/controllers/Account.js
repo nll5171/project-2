@@ -11,10 +11,17 @@ const isLoggedIn = (req, res) => {
   return res.status(200).json({ loggedIn });
 };
 
-const getUserInfo = (req, res) => res.status(200).json({
-  premium: req.session.account.premium,
-  huntAmt: req.session.account.huntAmt,
-});
+const getUserInfo = async (req, res) => {
+  try {
+    const doc = await Account.findById(req.session.account._id).lean().exec();
+    req.session.account.premium = doc.premium;
+    req.session.account.huntAmt = doc.huntAmt;
+    return res.json({ premium: doc.premium, huntAmt: doc.huntAmt });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Something went wrong retrieving user info!' });
+  }
+};
 
 const logout = (req, res) => {
   req.session.destroy();
@@ -32,7 +39,7 @@ const login = (req, res) => {
 
   return Account.authenticate(username, pass, (err, account) => {
     if (err || !account) {
-      return res.status(401).json({ error: 'Wrong username or password!' });
+      return res.status(401).json({ error: 'Incorrect username or password!' });
     }
 
     req.session.account = Account.toAPI(account);
@@ -96,11 +103,12 @@ const changePass = async (req, res) => {
 
   // Try changing password
   try {
-    const hash = await Account.genereateHash(pass);
+    const hash = await Account.generateHash(pass);
 
     await Account.findByIdAndUpdate(req.session.account._id, { password: hash }).lean().exec();
-    return res.json({ redirect: '/' });
+    return res.json({ redirect: '/maker' });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ error: 'An error occurred!' });
   }
 };

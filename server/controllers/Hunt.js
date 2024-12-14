@@ -8,6 +8,8 @@ const maxHuntsPremium = 50;
 
 const makerPage = async (req, res) => res.render('app');
 
+const explorePage = async (req, res) => res.render('explore');
+
 // Create a new Scavenger Hunt with the tasks provided
 const makeHunt = async (req, res) => {
   // Ensure user hasn't made the maximum amount of scavenger hunts
@@ -61,13 +63,13 @@ const removeHunt = async (req, res) => {
     console.log(err);
     return res.status(500).json({ error: 'Something went wrong when removing hunt!' });
   }
-}
+};
 
 // Gets all ongoing scavenger hunts, ignores completed ones
 const getHunts = async (req, res) => {
   try {
     // Only search for ongoing hunts
-    const query = { deadline: { $gt: Date.now } };
+    const query = { deadline: { $gt: new Date() } };
     const docs = await Hunt.find(query).select('name owner deadline _id tasks').lean().exec();
     return res.json({ hunts: docs });
   } catch (err) {
@@ -91,6 +93,7 @@ const getUserHunts = async (req, res) => {
 
 module.exports = {
   makerPage,
+  explorePage,
   makeHunt,
   getHunts,
   getUserHunts,
